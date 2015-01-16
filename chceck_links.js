@@ -72,30 +72,41 @@ function continueExecution(){
             // console.log("this link is okay to test");
             // begin if loop to test http status
 
-              // alert(url);
+            // alert(url);
+
+            linkInfo = linkInfo + i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '<br />'
+            var linksTested = parseInt(linksTested);
+            var linksTested = linksTested++;
+
+            /*
+            // commented out this block
 
             //  the next line opens the link and gets the status of the http request. Comment out when testing or working on visual design
             var http = new XMLHttpRequest();
             http.open('HEAD', url, false);
 
+
             // begin try catch block to test for error on send
             try {
               http.send();
               var resonse = http.status;
-              console.log(response);
+              // console.log(response);
 
                 if (http.status == 200){
+                  console.log(response);
                   linkInfo = linkInfo + i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '<br />'
                   var linksTested = parseInt(linksTested);
                   var linksTested = linksTested++;
 
                 } else if (http.status != 200) {
+                  console.log(response);
                   linkInfo = linkInfo + i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '<br />'
                   var linksTested = parseInt(linksTested);
                   var linksTested = linksTested++;
 
                 } else {
                   // end for loop to test http status
+                  console.log(response);
                   linkInfo = linkInfo + i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '<br />'
                   var linksTested = parseInt(linksTested);
                   var linksTested = linksTested++;
@@ -106,7 +117,11 @@ function continueExecution(){
               console.log(e);
               // end try catch block to test for error on send
 
+
             }
+
+           // end of comment for this block
+           */
 
             //  the next line is some dummy code for testing purposes. Comment out in production
             // if (i == i){
