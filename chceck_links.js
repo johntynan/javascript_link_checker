@@ -69,23 +69,50 @@ function continueExecution(){
             console.log("Matched a url that contains 'file'");        
             break;
           default:
-            console.log("this one is okay to test");
+            // console.log("this link is okay to test");
             // begin if loop to test http status
-            // if (http.status != 200){
-            //  the next line is some dummy code for testing purposes. Comment out in production
-            if (i == i){
 
               // alert(url);
-              // var http = new XMLHttpRequest();
-              // http.open('HEAD', url, false);
-              // http.send();
 
-              linkInfo = linkInfo + i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '<br />'
-              var linksTested = parseInt(linksTested);
-              var linksTested = linksTested++;
-            
-            // end for loop to test http status
+            //  the next line opens the link and gets the status of the http request. Comment out when testing or working on visual design
+            var http = new XMLHttpRequest();
+            http.open('HEAD', url, false);
+
+            // begin try catch block to test for error on send
+            try {
+              http.send();
+              var resonse = http.status;
+              console.log(response);
+
+                if (http.status == 200){
+                  linkInfo = linkInfo + i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '<br />'
+                  var linksTested = parseInt(linksTested);
+                  var linksTested = linksTested++;
+
+                } else if (http.status != 200) {
+                  linkInfo = linkInfo + i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '<br />'
+                  var linksTested = parseInt(linksTested);
+                  var linksTested = linksTested++;
+
+                } else {
+                  // end for loop to test http status
+                  linkInfo = linkInfo + i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '<br />'
+                  var linksTested = parseInt(linksTested);
+                  var linksTested = linksTested++;
+                  }
+
+                } catch (e) {
+
+              console.log(e);
+              // end try catch block to test for error on send
+
             }
+
+            //  the next line is some dummy code for testing purposes. Comment out in production
+            // if (i == i){
+
+
+
 
             break;
         
