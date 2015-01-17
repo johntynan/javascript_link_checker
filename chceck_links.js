@@ -60,17 +60,24 @@ function continueExecution(){
 
         // begin switch statement to elimintate exclusions
         str = url;
+        // alert(str.match(/layouts/gi) == 'layouts');
+        // alert(str.match(/file/gi) == 'file');        
 
-        switch (str) {
-          case str.match(/layouts/gi):
+        // begin enclosing function to test url to see if it contains some restricted locations, then open up a http request to the page and see if the page exists
+        function test(str) {
+		switch (true) {	
+        // switch (str) {
+		  case /layouts/gi.test(str):
+          // case str.match(/layouts/gi) == 'layouts':
             console.log("Matched a url that contains 'layouts'");
             break;
-          case str.match(/file/gi):
+          case /file/gi.test(str):
+          // case str.match(/file/gi) == 'file':
             console.log("Matched a url that contains 'file'");        
             break;
           default:
             // console.log("this link is okay to test");
-
+            
             // alert(url);
 
             // linkInfo = linkInfo + i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '<br />'
@@ -131,7 +138,10 @@ function continueExecution(){
         
         // end switch statement to elimintate exclusions
         }
+        // end enclosing function to test url to see if it contains some restricted locations, then open up a http request to the page and see if the page exists
+	    }
 
+    test(str);
     // end for loop to test internal / external links here
     }
 
