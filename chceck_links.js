@@ -70,16 +70,15 @@ function continueExecution(){
             break;
           default:
             // console.log("this link is okay to test");
-            // begin if loop to test http status
 
             // alert(url);
 
-            linkInfo = linkInfo + i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '<br />'
-            var linksTested = parseInt(linksTested);
-            var linksTested = linksTested++;
+            // linkInfo = linkInfo + i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '<br />'
+            // var linksTested = parseInt(linksTested);
+            // var linksTested = linksTested++;
 
-            /*
-            // commented out this block
+            // insert * here if you want to 
+            // comment out this block
 
             //  the next line opens the link and gets the status of the http request. Comment out when testing or working on visual design
             var http = new XMLHttpRequest();
@@ -90,44 +89,43 @@ function continueExecution(){
             try {
               http.send();
               var resonse = http.status;
-              // console.log(response);
+              console.log(response);
 
-                if (http.status == 200){
-                  console.log(response);
-                  linkInfo = linkInfo + i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '<br />'
+                // if (http.status == 200){
+                if (http.status == 'response is not defined'){
+				  console.log("found a good link");
+                  // console.log(response);
+                  linkInfo = linkInfo + '<span class="good">' +  i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
                   var linksTested = parseInt(linksTested);
                   var linksTested = linksTested++;
 
-                } else if (http.status != 200) {
-                  console.log(response);
-                  linkInfo = linkInfo + i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '<br />'
+                } else if (http.status == 404) {
+				  console.log("found a broken link");
+                  // console.log(response);
+                  linkInfo = linkInfo + '<span class="broken">' + i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
                   var linksTested = parseInt(linksTested);
                   var linksTested = linksTested++;
 
                 } else {
                   // end for loop to test http status
-                  console.log(response);
-                  linkInfo = linkInfo + i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '<br />'
+                  console.log("something else is happening here");
+                  // console.log(response);
+                  linkInfo = linkInfo + '<span class="something else">' +  i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
                   var linksTested = parseInt(linksTested);
                   var linksTested = linksTested++;
                   }
 
                 } catch (e) {
 
-              console.log(e);
-              // end try catch block to test for error on send
-
-
+                  console.log(e);
+                  // end try catch block to test for error on send
+                  linkInfo = linkInfo + '<span class="something else">' +  i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+                  var linksTested = parseInt(linksTested);
+                  var linksTested = linksTested++;
             }
 
            // end of comment for this block
-           */
-
-            //  the next line is some dummy code for testing purposes. Comment out in production
-            // if (i == i){
-
-
-
+           // insert * here if you want to 
 
             break;
         
@@ -157,8 +155,6 @@ pause();
 
 /*
 // bookmarklet code
-javascript:(function (){document.getElementsByTagName('head')[0].appendChild(document.createElement
-
-('script')).src='http://YOURDOMAINHERE.COM/check_links.js?'+Math.random();}());
-
+javascript:(function (){document.getElementsByTagName('head')[0].appendChild(document.createElement('script')).src='http://YOURDOMAINHERE.COM/check_links.js?'+Math.random();}());
 */
+
