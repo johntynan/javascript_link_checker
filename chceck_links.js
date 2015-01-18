@@ -3,10 +3,17 @@
 // alert(location.host);
 
 var pageTitle = document.title
-var links = document.getElementsByTagName('a'); // get all links
-var totalLinks = links.length
 var linkAnchors = document.getElementsByTagName('a');
-var linkInfo = ''
+
+var links = document.getElementsByTagName('a'); // get all links
+
+var totalLinks = links.length
+var totalLinksGood = 0
+var totalLinksBad = 0
+
+var linkInfoGood = ''
+var linkInfoBad = ''
+var linkInfoTotal = ''
 
 
 var w = window.open();
@@ -19,7 +26,9 @@ var linksTested = 0;
 // alert(isNaN(linksTested));
 
 var testStatus = w.document.createElement('div');
-var testProgress = w.document.createElement('div');
+var testProgressBadLinks = w.document.createElement('div');
+var testProgressGoodLinks = w.document.createElement('div');
+var testProgressTotal = w.document.createElement('div');
 
 function pause(){
   //do some things
@@ -31,13 +40,15 @@ function pause(){
 function continueExecution(){
 
   w.document.body.appendChild(testStatus);
-  w.document.body.appendChild(testProgress);
-
-  testProgress.style.width = "100%";
-
-  testStatus.innerHTML = '<h1>Link Test Started</h1>'
-
-  testProgress.textContent = 'Total links: ' + totalLinks 
+  w.document.body.appendChild(testProgressBadLinks);
+  w.document.body.appendChild(testProgressGoodLinks);
+  w.document.body.appendChild(testProgressTotal);
+   
+  testProgressGoodLinks.style.width = "100%";
+  testProgressBadLinks.style.width = "100%";
+  testProgressTotal.style.width = "100%";
+    
+  testStatus.innerHTML = '<h1>Link Test Started for ' + pageTitle + '</h1>'
 
   // begin for loop over links here
   for (var i = 0 ; i < links.length; i++)
@@ -70,10 +81,12 @@ function continueExecution(){
 		  case /layouts/gi.test(str):
           // case str.match(/layouts/gi) == 'layouts':
             console.log("Matched a url that contains 'layouts'");
+            linkInfoTotal = linkInfoTotal + '<span class="excluded" style="background-color:yellow">' +  (i+1).toString() + ') <strong>Excluded</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
             break;
           case /file/gi.test(str):
           // case str.match(/file/gi) == 'file':
-            console.log("Matched a url that contains 'file'");        
+            console.log("Matched a url that contains 'file'");
+            linkInfoTotal = linkInfoTotal + '<span class="excluded" style="background-color:yellow">' +  (i+1).toString() + ') <strong>Excluded</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
             break;
           default:
             // console.log("this link is okay to test");
@@ -83,9 +96,6 @@ function continueExecution(){
             // linkInfo = linkInfo + i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '<br />'
             // var linksTested = parseInt(linksTested);
             // var linksTested = linksTested++;
-
-            // insert * here if you want to 
-            // comment out this block
 
             //  the next line opens the link and gets the status of the http request. Comment out when testing or working on visual design
             var http = new XMLHttpRequest();
@@ -101,14 +111,18 @@ function continueExecution(){
                 if (http.status == 200){
 				  // console.log("found a good link");
                   // console.log(response);
-                  linkInfo = linkInfo + '<span class="good" style="background-color:LightGreen">' +  i.toString() + ') <strong>Good</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+                  totalLinksGood = totalLinksGood + 1
+                  linkInfoGood = linkInfoGood + '<span class="good">' +  totalLinksGood.toString() + ') <strong>Good</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+                  linkInfoTotal = linkInfoTotal + '<span class="good" style="background-color:LightGreen">' +  (i+1).toString() + ') <strong>Good</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
                   var linksTested = parseInt(linksTested);
                   var linksTested = linksTested++;
 
                 } else if (http.status == 404) {
 				  // console.log("found a broken link");
                   // console.log(response);
-                  linkInfo = linkInfo + '<span class="broken" style="background-color:LightCoral">' + i.toString() + ') <strong>Broken</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+                  totalLinksBad = totalLinksBad + 1
+                  linkInfoBad = linkInfoBad + '<span class="broken">' + totalLinksBad.toString() + ') <strong>Broken</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+                  linkInfoTotal = linkInfoTotal + '<span class="broken" style="background-color:LightCoral">' + (i+1).toString() + ') <strong>Broken</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
                   var linksTested = parseInt(linksTested);
                   var linksTested = linksTested++;
 
@@ -116,7 +130,7 @@ function continueExecution(){
                   // end for loop to test http status
                   // console.log("something else is happening here");
                   // console.log(response);
-                  linkInfo = linkInfo + '<span class="something else" style="background-color:LightBlue">' +  i.toString() + ') <strong>Something Else</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+                  linkInfoTotal = linkInfoTotal + '<span class="something else" style="background-color:LightBlue">' +  (i+1).toString() + ') <strong>Something Else</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
                   var linksTested = parseInt(linksTested);
                   var linksTested = linksTested++;
                   }
@@ -125,14 +139,12 @@ function continueExecution(){
 				  
                   console.log(e);
                   // end try catch block to test for error on send
-                  // linkInfo = linkInfo + '<span class="something else">' +  i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+                  // linkInfoTotal = linkInfoTotal + '<span class="something else">' +  i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
                   // var linksTested = parseInt(linksTested);
                   // var linksTested = linksTested++;
                   
             }
 
-           // end of comment for this block
-           // insert * here if you want to 
 
             break;
         
@@ -153,11 +165,14 @@ testStatus.innerHTML = '<h1>Link Test Finished for: ' + pageTitle + '</h1>'
 
 // alert(linksTested);
 
-// testProgress.innerHTML = 'Total Links: ' + totalLinks + '<br /> Links Tested: ' + linksTested.toString() + '<br />'
+// testProgressGoodLinks.innerHTML = 'Total Links: ' + totalLinks + '<br /> Links Tested: ' + linksTested.toString() + '<br />'
 
-// testProgress.textContent = linkInfo
+// testProgressGoodLinks.textContent = linkInfo
 
-testProgress.innerHTML = linkInfo
+testProgressTotal.innerHTML = '<h2>Total Links: ' + totalLinks + '</h2>' + linkInfoTotal
+testProgressBadLinks.innerHTML = '<h2>Total Bad Links: ' + totalLinksBad + '</h2>' + linkInfoBad
+testProgressGoodLinks.innerHTML = '<h2>Total Good Links: ' + totalLinksGood + '</h2>' + linkInfoGood
+
 
 }
 
