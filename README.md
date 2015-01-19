@@ -7,9 +7,9 @@ How to install this:
 
 1) Save this javascript file on your web server.
 
-2) Copy the bookmarklet code at the end of this javascript file and save it as a bookmark in your browser.
+2) Edit the bookmarklet code at the end of this javascript file to point to the location where you saved the javascript file on your web server, then save the bookmarklet as a bookmark in your browser.
 
-3) Go to the page on your web site that you want to test. (Please note: this page should be hosted on the same web server where you are serving this javascript)
+3) Go to the page on your web site that you want to test.
 
 4) Click on the bookmarklet you just created.
 
