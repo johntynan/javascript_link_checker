@@ -54,102 +54,91 @@ function continueExecution(){
   for (var i = 0 ; i < links.length; i++)
   {
 
-    // alert(links[i].href);
+    url = links[i].href;
 
-    // begin for loop to test internal / external links here
-    if (links[i].host !== location.host) {
-      // external
-    }
-    else {
-      // internal
-
-      // alert(links[i].host);
-
-      url = links[i].href;
-
-      // alert(url);
-
-        // begin switch statement to elimintate exclusions
-        str = url;    
-
-        // begin enclosing function to test url to see if it contains some restricted locations, then open up a http request to the page and see if the page exists
-        function test(str) {
-          // begin switch statement to elimintate exclusions
-          switch (true) {	
-            // begin case statement to test for exclusions
-            case /layouts/gi.test(str):
-              // console.log("Matched a url that contains 'layouts'");
-              linkInfoTotal = linkInfoTotal + '<span class="excluded" style="background-color:yellow">' +  (i+1).toString() + ') <strong>Excluded</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
-              break;
-            case /file/gi.test(str):
-              // console.log("Matched a url that contains 'file'");
-              linkInfoTotal = linkInfoTotal + '<span class="excluded" style="background-color:yellow">' +  (i+1).toString() + ') <strong>Excluded</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
-              break;
-            default:
-              // console.log("this link is okay to test");
-              // console.log(url);
+    // begin switch statement to elimintate exclusions
   
-              //  the next line opens the link and gets the status of the http request. Comment out when testing or working on visual design
-              var http = new XMLHttpRequest();
-              http.open('HEAD', url, false);
+    // begin enclosing function to test url to see if it contains some restricted locations, then open up a http request to the page and see if the page exists
+    function test(url) {
+      // begin switch statement to elimintate exclusions
+      switch (true) {	
+        // begin case statement to test for exclusions
+        case links[i].host !== location.host:
+          // console.log("Matched a url that is an external link");
+          linkInfoTotal = linkInfoTotal + '<span class="excluded" style="background-color:yellow">' +  (i+1).toString() + ') <strong>Excluded</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+          break;
+        case /layouts/gi.test(url):
+          // console.log("Matched a url that contains 'layouts'");
+          linkInfoTotal = linkInfoTotal + '<span class="excluded" style="background-color:yellow">' +  (i+1).toString() + ') <strong>Excluded</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+          break;
+        case /file/gi.test(url):
+          // console.log("Matched a url that contains 'file'");
+          linkInfoTotal = linkInfoTotal + '<span class="excluded" style="background-color:yellow">' +  (i+1).toString() + ') <strong>Excluded</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+          break;
+        default:
+          // console.log("this link is okay to test");
+          // console.log(url);
   
-              // begin try catch block to test for error on send
-              try {
-                http.send();
-                var response = http.status;
-                console.log(response);
+          //  the next line opens the link and gets the status of the http request. Comment out when testing or working on visual design
+          var http = new XMLHttpRequest();
+          http.open('HEAD', url, false);
   
-                if (http.status == 200){
-                  // console.log("found a good link");
-                  // console.log(response);
-                  totalLinksGood = totalLinksGood + 1
-                  linkInfoGood = linkInfoGood + '<span class="good">' +  totalLinksGood.toString() + ') <strong>Good</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
-                  linkInfoTotal = linkInfoTotal + '<span class="good" style="background-color:LightGreen">' +  (i+1).toString() + ') <strong>Good</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
-                  var linksTested = parseInt(linksTested);
-                  var linksTested = linksTested++;
+          // begin try catch block to test for error on send
+          try {
+            http.send();
+            var response = http.status;
+            console.log(response);
   
-                } else if (http.status == 404) {
-                  // console.log("found a broken link");
-                  // console.log(response);
-                  totalLinksBad = totalLinksBad + 1
-                  linkInfoBad = linkInfoBad + '<span class="broken">' + totalLinksBad.toString() + ') <strong>Broken</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
-                  linkInfoTotal = linkInfoTotal + '<span class="broken" style="background-color:LightCoral">' + (i+1).toString() + ') <strong>Broken</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
-                  var linksTested = parseInt(linksTested);
-                  var linksTested = linksTested++;
+            if (http.status == 200){
+              // console.log("found a good link");
+              // console.log(response);
+              totalLinksGood = totalLinksGood + 1
+              linkInfoGood = linkInfoGood + '<span class="good">' +  totalLinksGood.toString() + ') <strong>Good</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+              linkInfoTotal = linkInfoTotal + '<span class="good" style="background-color:LightGreen">' +  (i+1).toString() + ') <strong>Good</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+              var linksTested = parseInt(linksTested);
+              var linksTested = linksTested++;
   
-                } else {
+            } else if (http.status == 404) {
+              // console.log("found a broken link");
+              // console.log(response);
+              totalLinksBad = totalLinksBad + 1
+              linkInfoBad = linkInfoBad + '<span class="broken">' + totalLinksBad.toString() + ') <strong>Broken</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+              linkInfoTotal = linkInfoTotal + '<span class="broken" style="background-color:LightCoral">' + (i+1).toString() + ') <strong>Broken</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+              var linksTested = parseInt(linksTested);
+              var linksTested = linksTested++;
   
-                  // console.log("something else is happening here");
-                  // console.log(response);
-                  linkInfoTotal = linkInfoTotal + '<span class="something else" style="background-color:LightBlue">' +  (i+1).toString() + ') <strong>Something Else</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
-                  var linksTested = parseInt(linksTested);
-                  var linksTested = linksTested++;
-                  
-                // end if statement to test http status
-                }
+            } else {
   
-              } catch (e) {
-            
-                console.log(e);
-                // end try catch block to test for error on send
-                // linkInfoTotal = linkInfoTotal + '<span class="something else">' +  i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
-                // var linksTested = parseInt(linksTested);
-                // var linksTested = linksTested++;
-                    
-              // end try catch block to test for error on send
-              }
+              // console.log("something else is happening here");
+              // console.log(response);
+              linkInfoTotal = linkInfoTotal + '<span class="something else" style="background-color:LightBlue">' +  (i+1).toString() + ') <strong>Something Else</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+              var linksTested = parseInt(linksTested);
+              var linksTested = linksTested++;
+              
+            // end if statement to test http status
+            }
+  
+          } catch (e) {
+        
+            console.log(e);
+            // end try catch block to test for error on send
+            // linkInfoTotal = linkInfoTotal + '<span class="something else">' +  i.toString() + ') ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+            // var linksTested = parseInt(linksTested);
+            // var linksTested = linksTested++;
                 
-              break;
-            // end case statement to test for exclusions
-
-          // end switch statement to elimintate exclusions
+          // end try catch block to test for error on send
           }
-        // end enclosing function to test url to see if it contains some restricted locations, then open up a http request to the page and see if the page exists
-        }
-
-    test(str);
-    // end for loop to test internal / external links here
+            
+          break;
+        // end case statement to test for exclusions
+  
+      // end switch statement to elimintate exclusions
+      }
+    // end enclosing function to test url to see if it contains some restricted locations, then open up a http request to the page and see if the page exists
     }
+  
+    // call enclosing function to test url to see if it contains some restricted locations, then open up a http request to the page and see if the page exists
+    test(url);
 
   // end for loop over links here
   }
