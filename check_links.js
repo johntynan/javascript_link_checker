@@ -11,10 +11,12 @@ var totalLinks = links.length
 var totalLinksGood = 0
 var totalLinksBad = 0
 var totalLinksExternal = 0
+var totalLinksExcluded = 0
 
 var linkInfoGood = ''
 var linkInfoBad = ''
 var linkInfoExternal = ''
+var linkInfoExcluded = ''
 var linkInfoTotal = ''
 
 
@@ -31,6 +33,7 @@ var testStatus = w.document.createElement('div');
 var testProgressBadLinks = w.document.createElement('div');
 var testProgressGoodLinks = w.document.createElement('div');
 var testProgressExternalLinks = w.document.createElement('div');
+var testProgressExcludedLinks = w.document.createElement('div');
 var testProgressTotal = w.document.createElement('div');
 
 function pause(){
@@ -46,11 +49,13 @@ function continueExecution(){
   w.document.body.appendChild(testProgressBadLinks);
   w.document.body.appendChild(testProgressGoodLinks);
   w.document.body.appendChild(testProgressExternalLinks);
+  w.document.body.appendChild(testProgressExcludedLinks);  
   w.document.body.appendChild(testProgressTotal);
    
   testProgressGoodLinks.style.width = "100%";
   testProgressBadLinks.style.width = "100%";
   testProgressExternalLinks.style.width = "100%";  
+  testProgressExcludedLinks.style.width = "100%";  
   testProgressTotal.style.width = "100%";
     
   testStatus.innerHTML = '<h1>Link Test Started for ' + pageTitle + '</h1>'
@@ -71,15 +76,21 @@ function continueExecution(){
         case links[i].host !== location.host:
           // console.log("Matched a url that is an external link");
           totalLinksExternal = totalLinksExternal + 1
+          totalLinksExcluded = totalLinksExcluded + 1
           linkInfoExternal = linkInfoExternal + '<span class="external">' +  totalLinksExternal.toString() + ') <strong>External</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
+          linkInfoExcluded = linkInfoExcluded + '<span class="external">' +  totalLinksExcluded.toString() + ') <strong>External</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
           linkInfoTotal = linkInfoTotal + '<span class="external" style="background-color:plum">' +  (i+1).toString() + ') <strong>External</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
           break;
         case /layouts/gi.test(url):
           // console.log("Matched a url that contains 'layouts'");
+          totalLinksExcluded = totalLinksExcluded + 1
+          linkInfoExcluded = linkInfoExcluded + '<span class="excluded">' +  totalLinksExcluded.toString() + ') <strong>Excluded</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
           linkInfoTotal = linkInfoTotal + '<span class="excluded" style="background-color:yellow">' +  (i+1).toString() + ') <strong>Excluded</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
           break;
         case /file/gi.test(url):
           // console.log("Matched a url that contains 'file'");
+          totalLinksExcluded = totalLinksExcluded + 1
+          linkInfoExcluded = linkInfoExcluded + '<span class="excluded">' +  totalLinksExcluded.toString() + ') <strong>Excluded</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
           linkInfoTotal = linkInfoTotal + '<span class="excluded" style="background-color:yellow">' +  (i+1).toString() + ') <strong>Excluded</strong> ' + links[i].href + ' = ' + linkAnchors[i].text + '</span><br />'
           break;
         default:
@@ -160,6 +171,7 @@ testStatus.innerHTML = '<h1>Link Test Finished for: ' + pageTitle + '</h1>'
 testProgressTotal.innerHTML = '<h2>Total Links: ' + totalLinks + '</h2>' + linkInfoTotal
 testProgressBadLinks.innerHTML = '<h2>Total Bad Links: ' + totalLinksBad + '</h2>' + linkInfoBad
 testProgressExternalLinks.innerHTML = '<h2>Total External Links: ' + totalLinksExternal + '</h2>' + linkInfoExternal
+testProgressExcludedLinks.innerHTML = '<h2>Total Excluded Links: ' + totalLinksExcluded + '</h2>' + linkInfoExcluded
 testProgressGoodLinks.innerHTML = '<h2>Total Good Links: ' + totalLinksGood + '</h2>' + linkInfoGood
 
 // end contintueExecution function here
